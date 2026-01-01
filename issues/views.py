@@ -1,5 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
+from django.contrib.admin.views.decorators import staff_member_required
+
 from .models import Issue, Vote
 from django.contrib import messages
 
@@ -42,3 +44,19 @@ def upvote_issue(request, issue_id):
         messages.info(request, "You have already voted for this issue.")
 
     return redirect('issue_list')
+
+@staff_member_required
+def admin_issue_list(request):
+    issues = Issue.objects.all().order_by('-votes')
+    return render(request, 'issues/admin_issue_list.html', {'issues': issues})
+
+@staff_member_required
+def update_status(request, issue_id):
+    issue = Issue.objects.get(id=issue_id)
+
+    if request.method == 'POST':
+        new_status = request.POST.get('status')
+        issue.status = new_status
+        issue.save()
+
+    return redirect('admin_issue_list')

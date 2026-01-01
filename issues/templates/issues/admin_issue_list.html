@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Issue Management</title>
+</head>
+<body>
+    <h2>Admin Issue Management</h2>
+
+    {% for issue in issues %}
+        <div>
+            <h3>{{ issue.title }}</h3>
+            <p>{{ issue.description }}</p>
+            <p><strong>Location:</strong> {{ issue.location }}</p>
+            <p><strong>Votes:</strong> {{ issue.votes }}</p>
+
+            <form action="{% url 'update_status' issue.id %}" method="post">
+                {% csrf_token %}
+                <select name="status">
+                    <option value="reported" {% if issue.status == 'reported' %}selected{% endif %}>Reported</option>
+                    <option value="in_progress" {% if issue.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                    <option value="resolved" {% if issue.status == 'resolved' %}selected{% endif %}>Resolved</option>
+                </select>
+
+                <button type="submit">Update Status</button>
+            </form>
+        </div>
+        <hr>
+    {% endfor %}
+</body>
+</html>
