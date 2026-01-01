@@ -5,6 +5,18 @@
 </head>
 <body>
     <h2>Reported Issues</h2>
+	{% if messages %}
+    <ul>
+        {% for message in messages %}
+            <li style="color: red;">{{ message }}</li>
+        {% endfor %}
+    </ul>
+	{% endif %}
+	{% if messages %}
+        {% for message in messages %}
+            <p class="{{ message.tags }}">{{ message }}</p>
+        {% endfor %}
+    {% endif %}
 
     <a href="{% url 'report_issue' %}">Report New Issue</a>
     <hr>
