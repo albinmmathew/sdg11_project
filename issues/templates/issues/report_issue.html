@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Report Issue</title>
+</head>
+<body>
+    <h2>Report a New Issue</h2>
+
+    <form method="post">
+        {% csrf_token %}
+        <label>Title:</label><br>
+        <input type="text" name="title" required><br><br>
+
+        <label>Description:</label><br>
+        <textarea name="description" required></textarea><br><br>
+
+        <label>Location:</label><br>
+        <input type="text" name="location" required><br><br>
+
+        <button type="submit">Submit</button>
+    </form>
+
+    <br>
+    <a href="{% url 'issue_list' %}">Back to Issues</a>
+</body>
+</html>

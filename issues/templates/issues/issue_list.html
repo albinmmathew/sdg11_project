@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Reported Issues</title>
+</head>
+<body>
+    <h2>Reported Issues</h2>
+
+    <a href="{% url 'report_issue' %}">Report New Issue</a>
+    <hr>
+
+    {% for issue in issues %}
+        <div>
+            <h3>{{ issue.title }}</h3>
+            <p>{{ issue.description }}</p>
+            <p><strong>Location:</strong> {{ issue.location }}</p>
+            <p><strong>Status:</strong> {{ issue.status }}</p>
+            <p><strong>Votes:</strong> {{ issue.votes }}</p>
+        </div>
+        <hr>
+    {% empty %}
+        <p>No issues reported yet.</p>
+    {% endfor %}
+</body>
+</html>
