@@ -1,5 +1,5 @@
 from django.contrib import admin
-from .models import Issue, Vote
+from .models import Issue, Vote, Category
 
 # Register your models here.
 
@@ -12,3 +12,8 @@ class IssueAdmin(admin.ModelAdmin):
 @admin.register(Vote)
 class VoteAdmin(admin.ModelAdmin):
     list_display = ('user', 'issue')
+
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ('name', 'is_emergency', 'helpline_number')
+    list_filter = ('is_emergency',)

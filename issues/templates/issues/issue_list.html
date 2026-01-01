@@ -22,7 +22,7 @@
             <span class="badge bg-info text-dark">{{ issue.status }}</span>
         </p>
         <p><strong>Votes:</strong> {{ issue.votes }}</p>
-
+		<p><strong>Category:</strong> {{ issue.category.name }}</p>
         <form action="{% url 'upvote_issue' issue.id %}" method="post">
             {% csrf_token %}
             <button type="submit" class="btn btn-outline-success btn-sm">
