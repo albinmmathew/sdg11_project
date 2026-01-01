@@ -6,9 +6,22 @@ from .models import Issue, Vote, Category
 from django.contrib import messages
 
 # Create your views here.
+from django.db.models import Case, When, Value, IntegerField
+
 @login_required
 def issue_list(request):
-    issues = Issue.objects.all().order_by('-votes', '-created_at')
+    issues = Issue.objects.annotate(
+        emergency_priority=Case(
+            When(category__is_emergency=True, then=Value(1)),
+            default=Value(0),
+            output_field=IntegerField(),
+        )
+    ).order_by(
+        '-emergency_priority',   # 🚨 emergency issues first
+        '-votes',                # 🔼 higher votes next
+        '-created_at'            # 🕒 newer issues last tie-breaker
+    )
+
     return render(request, 'issues/issue_list.html', {'issues': issues})
 
 from .models import Issue, Category
