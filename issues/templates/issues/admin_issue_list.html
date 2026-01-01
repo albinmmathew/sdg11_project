@@ -1,30 +1,28 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Admin Issue Management</title>
-</head>
-<body>
-    <h2>Admin Issue Management</h2>
+{% extends 'issues/base.html' %}
 
-    {% for issue in issues %}
-        <div>
-            <h3>{{ issue.title }}</h3>
-            <p>{{ issue.description }}</p>
-            <p><strong>Location:</strong> {{ issue.location }}</p>
-            <p><strong>Votes:</strong> {{ issue.votes }}</p>
+{% block content %}
+<h2 class="mb-4">Admin – Issue Management</h2>
 
-            <form action="{% url 'update_status' issue.id %}" method="post">
-                {% csrf_token %}
-                <select name="status">
-                    <option value="reported" {% if issue.status == 'reported' %}selected{% endif %}>Reported</option>
-                    <option value="in_progress" {% if issue.status == 'in_progress' %}selected{% endif %}>In Progress</option>
-                    <option value="resolved" {% if issue.status == 'resolved' %}selected{% endif %}>Resolved</option>
-                </select>
+{% for issue in issues %}
+<div class="card mb-3 border-danger">
+    <div class="card-body">
+        <h5 class="card-title">{{ issue.title }}</h5>
+        <p>{{ issue.description }}</p>
 
-                <button type="submit">Update Status</button>
-            </form>
-        </div>
-        <hr>
-    {% endfor %}
-</body>
-</html>
+        <p><strong>Location:</strong> {{ issue.location }}</p>
+        <p><strong>Votes:</strong> {{ issue.votes }}</p>
+
+        <form method="post" action="{% url 'update_status' issue.id %}">
+            {% csrf_token %}
+            <select name="status" class="form-select mb-2">
+                <option value="reported" {% if issue.status == 'reported' %}selected{% endif %}>Reported</option>
+                <option value="in_progress" {% if issue.status == 'in_progress' %}selected{% endif %}>In Progress</option>
+                <option value="resolved" {% if issue.status == 'resolved' %}selected{% endif %}>Resolved</option>
+            </select>
+
+            <button class="btn btn-danger btn-sm">Update Status</button>
+        </form>
+    </div>
+</div>
+{% endfor %}
+{% endblock %}

@@ -1,26 +1,32 @@
-<!DOCTYPE html>
-<html>
-<head>
-    <title>Report Issue</title>
-</head>
-<body>
-    <h2>Report a New Issue</h2>
+{% extends 'issues/base.html' %}
 
-    <form method="post">
-        {% csrf_token %}
-        <label>Title:</label><br>
-        <input type="text" name="title" required><br><br>
+{% block content %}
+<h2 class="mb-4">Report a New Issue</h2>
 
-        <label>Description:</label><br>
-        <textarea name="description" required></textarea><br><br>
+<form method="post" class="card p-4 shadow-sm">
+    {% csrf_token %}
 
-        <label>Location:</label><br>
-        <input type="text" name="location" required><br><br>
+    <div class="mb-3">
+        <label class="form-label">Title</label>
+        <input type="text" name="title" class="form-control" required>
+    </div>
 
-        <button type="submit">Submit</button>
-    </form>
+    <div class="mb-3">
+        <label class="form-label">Description</label>
+        <textarea name="description" class="form-control" rows="4" required></textarea>
+    </div>
 
-    <br>
-    <a href="{% url 'issue_list' %}">Back to Issues</a>
-</body>
-</html>
+    <div class="mb-3">
+        <label class="form-label">Location</label>
+        <input type="text" name="location" class="form-control" required>
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Submit Issue
+    </button>
+
+    <a href="{% url 'issue_list' %}" class="btn btn-link">
+        Back to Issues
+    </a>
+</form>
+{% endblock %}
