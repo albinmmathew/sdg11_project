@@ -31,3 +31,13 @@ class Issue(models.Model):
 
     def __str__(self):
         return self.title
+
+class Vote(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    issue = models.ForeignKey(Issue, on_delete=models.CASCADE)
+
+    class Meta:
+        unique_together = ('user', 'issue')
+
+    def __str__(self):
+        return f"{self.user.username} voted {self.issue.title}"

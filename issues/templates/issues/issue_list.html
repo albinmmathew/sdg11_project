@@ -16,7 +16,13 @@
             <p><strong>Location:</strong> {{ issue.location }}</p>
             <p><strong>Status:</strong> {{ issue.status }}</p>
             <p><strong>Votes:</strong> {{ issue.votes }}</p>
+			<form action="{% url 'upvote_issue' issue.id %}" method="post">
+				{% csrf_token %}
+				<button type="submit">👍 Upvote</button>
+			</form>
         </div>
+		
+		
         <hr>
     {% empty %}
         <p>No issues reported yet.</p>

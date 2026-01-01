@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
-from .models import Issue
+from .models import Issue, Vote
+from django.contrib import messages
 
 # Create your views here.
 @login_required
@@ -24,3 +25,20 @@ def report_issue(request):
         return redirect('issue_list')
 
     return render(request, 'issues/report_issue.html')
+
+@login_required
+def upvote_issue(request, issue_id):
+    issue = Issue.objects.get(id=issue_id)
+
+    vote, created = Vote.objects.get_or_create(
+        user=request.user,
+        issue=issue
+    )
+
+    if created:
+        issue.votes += 1
+        issue.save()
+    else:
+        messages.info(request, "You have already voted for this issue.")
+
+    return redirect('issue_list')
