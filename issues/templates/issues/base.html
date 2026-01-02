@@ -9,34 +9,77 @@
 </head>
 <body class="bg-light">
 
-	<nav class="navbar navbar-dark bg-dark mb-4">
+	<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
 		<div class="container">
 			<a class="navbar-brand" href="{% url 'issue_list' %}">
 				Smart City Portal
 			</a>
 	
-			<div>
-				{% if user.is_authenticated %}
-					<span class="text-white me-3">
-						{{ user.username }}
-					</span>
-					<form action="{% url 'logout' %}" method="post" style="display:inline;">
-						{% csrf_token %}
-						<button type="submit" class="btn btn-outline-light btn-sm">
-							Logout
-						</button>
-					</form>
-					
-				{% else %}
-					<a href="{% url 'login' %}" class="btn btn-outline-light btn-sm me-2">
-						Login
-					</a>
-					<a href="{% url 'register' %}" class="btn btn-outline-light btn-sm">
-						Register
-					</a>
-				{% endif %}
+			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+					data-bs-target="#navbarNav">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+	
+			<div class="collapse navbar-collapse" id="navbarNav">
+				<ul class="navbar-nav me-auto">
+	
+					{% if user.is_authenticated %}
+						<!-- Common for all logged-in users -->
+						<li class="nav-item">
+							<a class="nav-link" href="{% url 'issue_list' %}">
+								View Issues
+							</a>
+						</li>
+	
+						<!-- Citizen features -->
+						{% if not user.is_staff %}
+							<li class="nav-item">
+								<a class="nav-link" href="{% url 'report_issue' %}">
+									Report Issue
+								</a>
+							</li>
+						{% endif %}
+	
+						<!-- Admin features -->
+						{% if user.is_staff %}
+							<li class="nav-item">
+								<a class="nav-link text-warning" href="{% url 'admin_issue_list' %}">
+									Admin Issues
+								</a>
+							</li>
+						{% endif %}
+					{% endif %}
+	
+				</ul>
+	
+				<ul class="navbar-nav">
+					{% if user.is_authenticated %}
+						<li class="nav-item me-2">
+							<span class="navbar-text text-white">
+								{{ user.username }}
+							</span>
+						</li>
+	
+						<li class="nav-item">
+							<form action="{% url 'logout' %}" method="post">
+								{% csrf_token %}
+								<button class="btn btn-outline-light btn-sm">
+									Logout
+								</button>
+							</form>
+						</li>
+					{% else %}
+						<li class="nav-item">
+							<a class="btn btn-outline-light btn-sm me-2" href="{% url 'login' %}">
+								Login
+							</a>
+							<a class="btn btn-outline-light btn-sm" href="{% url 'register' %}">
+								Register
+							</a>
+						</li>
+					{% endif %}
+				</ul>
 			</div>
-
 		</div>
 	</nav>
 	
