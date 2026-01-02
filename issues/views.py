@@ -10,19 +10,39 @@ from django.db.models import Case, When, Value, IntegerField
 
 @login_required
 def issue_list(request):
-    issues = Issue.objects.annotate(
+
+    # Main issue list with prioritization
+    issues = Issue.objects.select_related('category').annotate(
         emergency_priority=Case(
             When(category__is_emergency=True, then=Value(1)),
             default=Value(0),
             output_field=IntegerField(),
         )
     ).order_by(
-        '-emergency_priority',   # 🚨 emergency issues first
-        '-votes',                # 🔼 higher votes next
-        '-created_at'            # 🕒 newer issues last tie-breaker
+        '-emergency_priority',
+        '-votes',
+        '-created_at'
     )
 
-    return render(request, 'issues/issue_list.html', {'issues': issues})
+    # ✅ SUMMARY COUNTS (THIS IS THE FIX)
+    total_count = Issue.objects.count()
+
+    emergency_count = Issue.objects.filter(
+        category__is_emergency=True
+    ).count()
+
+    resolved_count = Issue.objects.filter(
+        status='resolved'
+    ).count()
+
+    context = {
+        'issues': issues,
+        'total_count': total_count,
+        'emergency_count': emergency_count,
+        'resolved_count': resolved_count,
+    }
+
+    return render(request, 'issues/issue_list.html', context)
 
 from .models import Issue, Category
 

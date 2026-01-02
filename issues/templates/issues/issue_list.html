@@ -1,37 +1,78 @@
 {% extends 'issues/base.html' %}
-
 {% block content %}
-<h2 class="mb-3">Reported Issues</h2>
-{% if messages %}
-        {% for message in messages %}
-            <p class="{{ message.tags }}">{{ message }}</p>
-        {% endfor %}
-{% endif %}
-<a href="{% url 'report_issue' %}" class="btn btn-primary mb-4">
-    + Report New Issue
-</a>
 
-{% for issue in issues %}
-<div class="card mb-3">
-    <div class="card-body">
-        <h5 class="card-title">{{ issue.title }}</h5>
-        <p class="card-text">{{ issue.description }}</p>
+<h2 class="fw-bold">Reported Issues</h2>
+<p class="text-muted mb-4">
+    Track and support civic issues in your community. Vote to prioritize what matters most.
+</p>
 
-        <p class="mb-1"><strong>Location:</strong> {{ issue.location }}</p>
-        <p class="mb-1"><strong>Status:</strong>
-            <span class="badge bg-info text-dark">{{ issue.status }}</span>
-        </p>
-        <p><strong>Votes:</strong> {{ issue.votes }}</p>
-		<p><strong>Category:</strong> {{ issue.category.name }}</p>
-        <form action="{% url 'upvote_issue' issue.id %}" method="post">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-outline-success btn-sm">
-                👍 Upvote
-            </button>
-        </form>
+<!-- SUMMARY CARDS -->
+<div class="row mb-4">
+    <div class="col-md-4">
+        <div class="summary-card border-primary">
+            <span>Total Issues</span>
+            <h3>{{ total_count }}</h3>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="summary-card border-danger">
+            <span>Emergency</span>
+            <h3>{{ emergency_count }}</h3>
+        </div>
+    </div>
+    <div class="col-md-4">
+        <div class="summary-card border-success">
+            <span>Resolved</span>
+            <h3>{{ resolved_count }}</h3>
+        </div>
     </div>
 </div>
-{% empty %}
-<p>No issues reported yet.</p>
+
+<!-- ISSUE CARDS -->
+<div class="row">
+{% for issue in issues %}
+    <div class="col-md-4 mb-4">
+        <div class="issue-card {% if issue.category.is_emergency %}emergency{% endif %}">
+
+            <!-- BADGES -->
+            <div class="mb-2">
+                {% if issue.category.is_emergency %}
+                    <span class="badge bg-danger">EMERGENCY</span>
+                {% endif %}
+                <span class="badge bg-light text-dark">{{ issue.category.name }}</span>
+
+                {% if issue.status == 'reported' %}
+                    <span class="badge bg-warning text-dark">Reported</span>
+                {% elif issue.status == 'in_progress' %}
+                    <span class="badge bg-primary">In Progress</span>
+                {% elif issue.status == 'resolved' %}
+                    <span class="badge bg-success">Resolved</span>
+                {% endif %}
+            </div>
+
+            <!-- TITLE -->
+            <h5 class="fw-bold">{{ issue.title }}</h5>
+
+            <!-- DESCRIPTION -->
+            <p class="text-muted small">{{ issue.description }}</p>
+
+            <!-- LOCATION -->
+            <p class="small">
+                📍 {{ issue.location }}
+            </p>
+
+            <!-- FOOTER -->
+            <div class="d-flex justify-content-between align-items-center mt-3">
+                <form method="post" action="{% url 'upvote_issue' issue.id %}">
+                    {% csrf_token %}
+                    <button class="vote-btn">
+                        👍 {{ issue.votes }}
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
 {% endfor %}
+</div>
+
 {% endblock %}
