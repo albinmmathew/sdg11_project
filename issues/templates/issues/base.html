@@ -7,6 +7,7 @@
     <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 
+	<!--Status cards-->
 	<style>
 		.summary-card {
 			border: 2px solid;
@@ -36,6 +37,7 @@
 			font-weight: 600;
 		}
 	</style>
+	<!--Login/ registration-->
 	<style>
 		.auth-wrapper {
 			min-height: 100vh;
@@ -89,85 +91,124 @@
 			opacity: 0.95;
 		}
 	</style>		
+	<!--Navbar-->
+	<style>
+		.navbar-clean {
+			background: #ffffff;
+			border-bottom: 1px solid #e5e7eb;
+		}
+		
+		.brand-icon {
+			width: 36px;
+			height: 36px;
+			border-radius: 10px;
+			background: #2563eb;
+			display: inline-flex;
+			align-items: center;
+			justify-content: center;
+			color: #fff;
+			font-size: 18px;
+			margin-right: 10px;
+		}
+		
+		.sdg-pill {
+			background: #dcfce7;
+			color: #166534;
+			font-size: 0.75rem;
+			padding: 4px 10px;
+			border-radius: 999px;
+			margin-left: 10px;
+		}
+		
+		.nav-pill {
+			display: flex;
+			gap: 8px;
+			background: #f1f5f9;
+			padding: 6px;
+			border-radius: 14px;
+		}
+		
+		.nav-pill a {
+			padding: 8px 14px;
+			border-radius: 10px;
+			text-decoration: none;
+			color: #0f172a;
+			font-weight: 500;
+			display: flex;
+			align-items: center;
+			gap: 6px;
+		}
+		
+		.nav-pill a.active,
+		.nav-pill a:hover {
+			background: #0f172a;
+			color: #ffffff;
+		}
+		
+		.logout-btn {
+			border: 1px solid #e5e7eb;
+			padding: 8px 14px;
+			border-radius: 10px;
+			background: #fff;
+		}
+		</style>
 		
 </head>
 
 <body class="bg-light">
 
-	<nav class="navbar navbar-expand-lg navbar-dark bg-dark mb-4">
+	<nav class="navbar navbar-expand-lg navbar-clean">
 		<div class="container">
-			<a class="navbar-brand" href="{% url 'issue_list' %}">
-				Smart City Portal
+	
+			<!-- LEFT: Brand -->
+			<a class="navbar-brand d-flex align-items-center fw-bold" href="{% url 'issue_list' %}">
+				<div class="brand-icon">🏠</div>
+				Citizen Engagement
+				<span class="sdg-pill">SDG 11</span>
 			</a>
 	
+			<!-- Mobile toggle -->
 			<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-					data-bs-target="#navbarNav">
+					data-bs-target="#navbarMain">
 				<span class="navbar-toggler-icon"></span>
 			</button>
 	
-			<div class="collapse navbar-collapse" id="navbarNav">
-				<ul class="navbar-nav me-auto">
+			<!-- NAV CONTENT -->
+			<div class="collapse navbar-collapse justify-content-end" id="navbarMain">
 	
-					{% if user.is_authenticated %}
-						<!-- Common for all logged-in users -->
-						<li class="nav-item">
-							<a class="nav-link" href="{% url 'issue_list' %}">
-								View Issues
-							</a>
-						</li>
+				{% if user.is_authenticated %}
+				<div class="nav-pill me-3">
 	
-						<!-- Citizen features -->
-						{% if not user.is_staff %}
-							<li class="nav-item">
-								<a class="nav-link" href="{% url 'report_issue' %}">
-									Report Issue
-								</a>
-							</li>
-						{% endif %}
+					<a href="{% url 'issue_list' %}"
+					   class="{% if request.resolver_match.url_name == 'issue_list' %}active{% endif %}">
+						🏠 Issues
+					</a>
 	
-						<!-- Admin features -->
-						{% if user.is_staff %}
-							<li class="nav-item">
-								<a class="nav-link text-warning" href="{% url 'admin_issue_list' %}">
-									Admin Issues
-								</a>
-							</li>
-						{% endif %}
+					{% if not user.is_staff %}
+					<a href="{% url 'report_issue' %}"
+					   class="{% if request.resolver_match.url_name == 'report_issue' %}active{% endif %}">
+						📝 Report
+					</a>
 					{% endif %}
 	
-				</ul>
-	
-				<ul class="navbar-nav">
-					{% if user.is_authenticated %}
-						<li class="nav-item me-2">
-							<span class="navbar-text text-white">
-								{{ user.username }}
-							</span>
-						</li>
-	
-						<li class="nav-item">
-							<form action="{% url 'logout' %}" method="post">
-								{% csrf_token %}
-								<button class="btn btn-outline-light btn-sm">
-									Logout
-								</button>
-							</form>
-						</li>
-					{% else %}
-						<li class="nav-item">
-							<a class="btn btn-outline-light btn-sm me-2" href="{% url 'login' %}">
-								Login
-							</a>
-							<a class="btn btn-outline-light btn-sm" href="{% url 'register' %}">
-								Register
-							</a>
-						</li>
+					{% if user.is_staff %}
+					<a href="{% url 'admin_issue_list' %}"
+					   class="{% if request.resolver_match.url_name == 'admin_issue_list' %}active{% endif %}">
+						🛡 Admin
+					</a>
 					{% endif %}
-				</ul>
+				</div>
+	
+				<!-- Logout -->
+				<form action="{% url 'logout' %}" method="post">
+					{% csrf_token %}
+					<button class="logout-btn">Logout</button>
+				</form>
+				{% endif %}
+	
 			</div>
 		</div>
-	</nav>
-	
+	</nav>	
 
 <div class="container">
 
