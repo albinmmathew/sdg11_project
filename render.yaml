@@ -1,0 +1,7 @@
+services:
+  - type: web
+    name: smart-citizen-portal
+    env: python
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn smart_city.wsgi:application"
+    plan: free
