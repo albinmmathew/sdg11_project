@@ -1,35 +1,59 @@
 {% extends 'issues/base.html' %}
-
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-5">
-        <div class="card shadow-sm p-4">
-            <h3 class="text-center mb-4">Citizen Login</h3>
 
-            {% if form.errors %}
-                <div class="alert alert-danger">
-                    Invalid username or password
-                </div>
-            {% endif %}
+<div class="auth-wrapper">
+    <div class="auth-card text-center">
 
-            <form method="post">
-                {% csrf_token %}
+        <div class="app-icon">🏠</div>
 
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" required>
-                </div>
+        <h3 class="fw-bold">Smart Citizens Portal</h3>
+        <p class="text-muted mb-2">Building Sustainable Cities Together</p>
 
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password" class="form-control" required>
-                </div>
-
-                <button type="submit" class="btn btn-primary w-100">
-                    Login
-                </button>
-            </form>
+        <div class="sdg-badge">
+            SDG 11 – Sustainable Cities and Communities
         </div>
+
+        <h5 class="fw-semibold text-start mt-4">Welcome</h5>
+        <p class="text-muted text-start">
+            Sign in to report issues and engage with your community
+        </p>
+
+        {% if form.errors %}
+            <div class="alert alert-danger">
+                Invalid username or password
+            </div>
+        {% endif %}
+
+        <form method="post" class="text-start">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username"
+                       class="form-control"
+                       placeholder="your.username"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password"
+                       class="form-control"
+                       placeholder="••••••••"
+                       required>
+            </div>
+
+            <button type="submit" class="btn btn-auth w-100 mt-2">
+                Sign In
+            </button>
+        </form>
+
+        <p class="text-center mt-4 mb-0">
+            Don’t have an account?
+            <a href="{% url 'register' %}">Register</a>
+        </p>
+
     </div>
 </div>
+
 {% endblock %}

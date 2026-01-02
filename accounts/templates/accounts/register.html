@@ -1,43 +1,65 @@
 {% extends 'issues/base.html' %}
-
 {% block content %}
-<div class="row justify-content-center">
-    <div class="col-md-5">
-        <div class="card shadow-sm p-4">
-            <h3 class="text-center mb-4">Citizen Registration</h3>
 
-            {% if messages %}
-                {% for message in messages %}
-                    <div class="alert alert-danger">{{ message }}</div>
-                {% endfor %}
-            {% endif %}
+<div class="auth-wrapper">
+    <div class="auth-card text-center">
 
-            <form method="post">
-                {% csrf_token %}
+        <div class="app-icon">🏠</div>
 
-                <div class="mb-3">
-                    <label class="form-label">Username</label>
-                    <input type="text" name="username" class="form-control" required>
-                </div>
+        <h3 class="fw-bold">Smart Citizens Portal</h3>
+        <p class="text-muted mb-2">Join your community today</p>
 
-                <div class="mb-3">
-                    <label class="form-label">Password</label>
-                    <input type="password" name="password1" class="form-control" required>
-                </div>
-
-                <div class="mb-3">
-                    <label class="form-label">Confirm Password</label>
-                    <input type="password" name="password2" class="form-control" required>
-                </div>
-
-                <button class="btn btn-success w-100">Register</button>
-            </form>
-
-            <p class="text-center mt-3">
-                Already have an account?
-                <a href="{% url 'login' %}">Login</a>
-            </p>
+        <div class="sdg-badge">
+            SDG 11 – Sustainable Cities and Communities
         </div>
+
+        <h5 class="fw-semibold text-start mt-4">Create Account</h5>
+        <p class="text-muted text-start">
+            Register to report issues and participate in civic improvement
+        </p>
+
+        {% if messages %}
+            {% for message in messages %}
+                <div class="alert alert-danger">{{ message }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="post" class="text-start">
+            {% csrf_token %}
+
+            <div class="mb-3">
+                <label class="form-label">Username</label>
+                <input type="text" name="username"
+                       class="form-control"
+                       placeholder="choose a username"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Password</label>
+                <input type="password" name="password1"
+                       class="form-control"
+                       required>
+            </div>
+
+            <div class="mb-3">
+                <label class="form-label">Confirm Password</label>
+                <input type="password" name="password2"
+                       class="form-control"
+                       required>
+            </div>
+
+            <button class="btn btn-auth w-100 mt-2">
+                Create Account
+            </button>
+        </form>
+
+        <p class="text-center mt-4 mb-0">
+            Already registered?
+            <a href="{% url 'login' %}">Sign in</a>
+        </p>
+
     </div>
 </div>
+
 {% endblock %}
