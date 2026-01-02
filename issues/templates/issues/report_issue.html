@@ -32,15 +32,35 @@
                     </select>
                 </div>
 
-                <!-- EMERGENCY ALERT -->
-                <div id="emergencyBox" class="alert alert-danger d-none mb-4">
-                    <strong>⚠ Emergency Issue</strong><br>
-                    This issue requires immediate action.<br>
-                    Please contact emergency services:
-                    <br>
-                    📞 <strong id="helplineNumber"></strong>
-                </div>
+				<!-- EMERGENCY ALERT -->
+				<div id="emergencyBox" class="alert alert-danger d-none mt-4">
 
+					<div class="d-flex align-items-start gap-3">
+						<div style="font-size: 1.5rem;">🚨</div>
+				
+						<div>
+							<h6 class="fw-bold mb-1 text-danger">
+								Emergency Detected
+							</h6>
+				
+							<p class="mb-2">
+								You've selected an emergency category.  
+								For immediate assistance, please call:
+							</p>
+				
+							<p class="fw-bold fs-5 text-danger mb-2">
+								📞 <span id="helplineNumber"></span>
+							</p>
+				
+							<p class="small text-danger mb-0">
+								This form is for documentation purposes only.
+								Always contact emergency services first for urgent situations.
+							</p>
+						</div>
+					</div>
+				
+				</div>
+				
                 <!-- TITLE -->
                 <div class="mb-4">
                     <label class="form-label fw-semibold">
@@ -98,29 +118,30 @@
 
 <!-- AJAX EMERGENCY HANDLER -->
 <script>
-document.getElementById('categorySelect').addEventListener('change', function () {
-    const categoryId = this.value;
-    const box = document.getElementById('emergencyBox');
-    const phone = document.getElementById('helplineNumber');
-
-    if (!categoryId) {
-        box.classList.add('d-none');
-        phone.innerText = '';
-        return;
-    }
-
-    fetch(`/issues/ajax/category-info/?category_id=${categoryId}`)
-        .then(res => res.json())
-        .then(data => {
-            if (data.is_emergency && data.helpline) {
-                phone.innerText = data.helpline;
-                box.classList.remove('d-none');
-            } else {
-                box.classList.add('d-none');
-                phone.innerText = '';
-            }
-        });
-});
-</script>
+	document.getElementById('categorySelect').addEventListener('change', function () {
+	
+		const categoryId = this.value;
+		const box = document.getElementById('emergencyBox');
+		const phone = document.getElementById('helplineNumber');
+	
+		if (!categoryId) {
+			box.classList.add('d-none');
+			phone.innerText = '';
+			return;
+		}
+	
+		fetch(`/issues/ajax/category-info/?category_id=${categoryId}`)
+			.then(response => response.json())
+			.then(data => {
+				if (data.is_emergency && data.helpline) {
+					phone.innerText = data.helpline;
+					box.classList.remove('d-none');
+				} else {
+					box.classList.add('d-none');
+					phone.innerText = '';
+				}
+			});
+	});
+</script>	
 
 {% endblock %}

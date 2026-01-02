@@ -96,3 +96,21 @@ def update_status(request, issue_id):
         issue.save()
 
     return redirect('admin_issue_list')
+
+
+from django.http import JsonResponse
+
+def get_category_info(request):
+    category_id = request.GET.get('category_id')
+
+    try:
+        category = Category.objects.get(id=category_id)
+        return JsonResponse({
+            'is_emergency': category.is_emergency,
+            'helpline': category.helpline_number
+        })
+    except Category.DoesNotExist:
+        return JsonResponse({
+            'is_emergency': False,
+            'helpline': ''
+        })
