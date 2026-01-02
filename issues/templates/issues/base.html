@@ -9,19 +9,37 @@
 </head>
 <body class="bg-light">
 
-<nav class="navbar navbar-dark bg-dark mb-4">
-    <div class="container">
-        <a class="navbar-brand" href="{% url 'issue_list' %}">
-            Smart City Portal
-        </a>
+	<nav class="navbar navbar-dark bg-dark mb-4">
+		<div class="container">
+			<a class="navbar-brand" href="{% url 'issue_list' %}">
+				Smart City Portal
+			</a>
+	
+			<div>
+				{% if user.is_authenticated %}
+					<span class="text-white me-3">
+						{{ user.username }}
+					</span>
+					<form action="{% url 'logout' %}" method="post" style="display:inline;">
+						{% csrf_token %}
+						<button type="submit" class="btn btn-outline-light btn-sm">
+							Logout
+						</button>
+					</form>
+					
+				{% else %}
+					<a href="{% url 'login' %}" class="btn btn-outline-light btn-sm me-2">
+						Login
+					</a>
+					<a href="{% url 'register' %}" class="btn btn-outline-light btn-sm">
+						Register
+					</a>
+				{% endif %}
+			</div>
 
-        {% if user.is_authenticated %}
-            <span class="navbar-text text-white">
-                Logged in as {{ user.username }}
-            </span>
-        {% endif %}
-    </div>
-</nav>
+		</div>
+	</nav>
+	
 
 <div class="container">
 
